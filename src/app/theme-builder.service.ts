@@ -1,3 +1,4 @@
+import { lastValueFrom } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BuilderResult } from './types/builder-result';
@@ -14,7 +15,7 @@ export class ThemeBuilderService {
     private build(theme: Theme, config: BuilderConfig): Promise<BuilderResult> {
         config.baseTheme = theme.name + '.' + theme.colorScheme.replace(/-/g, '.');
 
-        const postBuilder: Promise<any> = this.http.post(`${this.url}/buildtheme`, config).toPromise();
+        const postBuilder: Promise<any> = lastValueFrom(this.http.post(`${this.url}/buildtheme`, config));
         return postBuilder;
     }
 
@@ -32,7 +33,7 @@ export class ThemeBuilderService {
     }
 
     getMetadata(): Promise<Metadata> {
-        const promise = this.http.get(`${this.url}/metadata`).toPromise() as Promise<Metadata>;
+        const promise = lastValueFrom(this.http.get(`${this.url}/metadata`)) as Promise<Metadata>;
         return promise;
     }
 }
